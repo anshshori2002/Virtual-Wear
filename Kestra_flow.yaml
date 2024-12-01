@@ -1,0 +1,66 @@
+id: try 
+namespace: ansh
+inputs: 
+  - id: user_image_url 
+    type: URI
+    defaults: https://segmind-sd-models.s3.amazonaws.com/display_images/model.png
+    
+  - id: cloth_image_url
+    type: URI
+    defaults: https://segmind-sd-models.s3.amazonaws.com/display_images/cloth.jpg
+
+
+tasks:
+  - id: Send_image_to_Api
+    type: io.kestra.plugin.scripts.python.Script
+    script: |
+    
+      from PIL import Image
+      from io import BytesIO
+      import requests
+      import base64
+
+      def image_url_to_base64(image_url):
+        response = requests.get(image_url)
+        image_data = response.content
+        return base64.b64encode(image_data).decode('utf-8')
+
+      api_key = "SG_1afd12a7789c2be8"
+      url = "https://api.segmind.com/v1/try-on-diffusion"
+
+      data = {
+      "model_image": image_url_to_base64("{{inputs.user_image_url}}"),  # Or use image_file_to_base64("IMAGE_PATH")
+      "cloth_image": image_url_to_base64("{{inputs.cloth_image_url}}"),  # Or use image_file_to_base64("IMAGE_PATH")
+      "category": "Upper body",
+      "num_inference_steps": 35,
+      "guidance_scale": 2,
+      "seed": 12467,
+      "base64": False
+      }
+
+      headers = {'x-api-key': api_key}
+
+      response = requests.post(url, json=data, headers=headers)
+
+      if response.status_code == 200:
+        image = Image.open(BytesIO(response.content))
+      else:
+        print("Failed to retrieve image. Status code:", response.status_code)
+        print("Response:", response.content)
+
+    outputFiles: 
+      - image
+
+    beforeCommands:
+      - pip install pillow
+
+  - id: read_output
+    type: io.kestra.plugin.scripts.shell.Commands
+    taskRunner:
+      type: io.kestra.plugin.core.runner.Process
+    commands:
+      - cat {{ outputs.python_output.outputFiles['image'] }}
+
+
+
+    
