@@ -3,15 +3,17 @@ namespace: ansh
 inputs: 
   - id: user_image_url 
     type: URI
+    required: true
     defaults: https://segmind-sd-models.s3.amazonaws.com/display_images/model.png
     
   - id: cloth_image_url
     type: URI
+    required: true
     defaults: https://segmind-sd-models.s3.amazonaws.com/display_images/cloth.jpg
 
 
 tasks:
-  - id: Send_image_to_Api
+  - id: Model_output
     type: io.kestra.plugin.scripts.python.Script
     script: |
     
@@ -44,23 +46,17 @@ tasks:
 
       if response.status_code == 200:
         image = Image.open(BytesIO(response.content))
+        with BytesIO() as output:
+            image.save(output, format="PNG")
+            image_base64 = base64.b64encode(output.getvalue()).decode('utf-8')
+            print("image_base64")  
+
       else:
         print("Failed to retrieve image. Status code:", response.status_code)
         print("Response:", response.content)
 
-    outputFiles: 
-      - image
-
     beforeCommands:
       - pip install pillow
-
-  - id: read_output
-    type: io.kestra.plugin.scripts.shell.Commands
-    taskRunner:
-      type: io.kestra.plugin.core.runner.Process
-    commands:
-      - cat {{ outputs.python_output.outputFiles['image'] }}
-
 
 
     
