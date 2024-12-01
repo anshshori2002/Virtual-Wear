@@ -5,7 +5,7 @@
 
 ![screenshot](https://github.com/anshshori2002/Virtual-Wear/blob/main/Screenshot%20(3).png)
 ![screenshot](https://github.com/anshshori2002/Virtual-Wear/blob/main/Screenshot%20(4).png)
-![screenshot](https://github.com/anshshori2002/Virtual-Wear/blob/main/Screenshot%20(7).png)
+![screenshot](https://github.com/anshshori2002/Virtual-Wear/blob/main/Screenshots/Screenshot%20(7).png)
 ![screenshot](https://github.com/anshshori2002/Virtual-Wear/blob/main/Screenshot%20(5).png)
 ![screenshot](https://github.com/anshshori2002/Virtual-Wear/blob/main/Screenshot%20(6).png)
 
