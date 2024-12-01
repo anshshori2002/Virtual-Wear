@@ -6,80 +6,124 @@
     <title>VirtualWear</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
-            background-color: #f7f9fc;
+            background: linear-gradient(to bottom right, #e3f2fd, #bbdefb);
             color: #333;
+            margin: 0;
+            padding: 0;
         }
+
         h1 {
-            color: #0056b3;
+            color: #1565c0;
             margin-top: 20px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
+
         #tryOnForm {
             display: inline-block;
             margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
+            padding: 25px 30px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
+
         label {
             display: block;
             font-weight: bold;
-            margin-top: 15px;
+            margin: 15px 0 5px;
+            color: #1565c0;
         }
+
         input[type="file"] {
             margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
         }
+
         button {
-            display: block;
             margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
+            padding: 12px 24px;
+            background: linear-gradient(to right, #4CAF50, #81C784);
             border: none;
             border-radius: 8px;
             color: white;
             font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
+
         button:hover {
-            background-color: #45a049;
+            background: linear-gradient(to right, #388E3C, #66BB6A);
+            transform: translateY(-2px);
         }
+
         #previewSection {
             display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            gap: 20px;
         }
+
         .preview {
-            display: inline-block;
-            width: 45%;
+            flex: 1 1 45%;
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
+
         .preview img {
             max-width: 100%;
             height: auto;
-            border: 1px solid #ddd;
             border-radius: 8px;
             margin-top: 10px;
         }
+
         #loading {
             display: none;
-            font-size: 16px;
+            font-size: 18px;
             color: #555;
+            margin-top: 20px;
+            animation: fadeIn 1s infinite;
         }
+
+        @keyframes fadeIn {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
         #resultSection {
             display: none;
-            margin-top: 20px;
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
+
         #resultImage {
             max-width: 100%;
             height: auto;
-            border: 2px solid #0056b3;
-            border-radius: 8px;
+            border-radius: 12px;
+            border: 3px solid #1565c0;
         }
+
         .error {
             color: red;
-            margin-top: 10px;
+            margin-top: 15px;
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -99,24 +143,23 @@
     
     <div id="previewSection">
         <div class="preview">
-            <h3>User Preview</h3>
+            <h3 style="color: #1565c0;">User Preview</h3>
             <img id="modelPreview" src="" alt="Model Image Preview" style="display:none;">
         </div>
         <div class="preview">
-            <h3>Clothing Preview</h3>
+            <h3 style="color: #1565c0;">Clothing Preview</h3>
             <img id="clothPreview" src="" alt="Clothing Image Preview" style="display:none;">
         </div>
     </div>
     
     <div id="resultSection">
-        <h2>Result:</h2>
+        <h2 style="color: #1565c0;">Result:</h2>
         <img id="resultImage" src="" alt="Result Image">
     </div>
     
     <div id="error" class="error"></div>
     
     <script>
-        // Display selected image previews
         function displayImagePreview(input, previewId) {
             const file = input.files[0];
             if (file) {
@@ -157,7 +200,6 @@
                 if (response.ok) {
                     const data = await response.json();
                     if (data.image) {
-                        // Show result image
                         const resultImage = document.getElementById('resultImage');
                         resultImage.src = `data:image/png;base64,${data.image}`;
                         document.getElementById('resultSection').style.display = 'block';
